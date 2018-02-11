@@ -9,7 +9,7 @@ import * as fromGuards from '@core/store/guards';
 
 export const routes: Routes = [
   {
-    path: 'home',
+    path: 'home',  
     component: HomeComponent
   },
   {
