@@ -1,5 +1,5 @@
 {
-  "name": "router",
+  "name": "auth",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
