@@ -1,6 +1,8 @@
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Params } from '@angular/router';
 import { ActionReducerMap, createFeatureSelector } from "@ngrx/store";
 import * as fromRouter from '@ngrx/router-store'
+import * as fromUser from "./user.reducers";
+import { User } from '../models/user.model';
 
 export interface RouterStateUrl {
     url: string;
@@ -9,11 +11,14 @@ export interface RouterStateUrl {
 }
 
 export interface State {
-    routerReducer: fromRouter.RouterReducerState<RouterStateUrl>
+    router: fromRouter.RouterReducerState<RouterStateUrl>,
+    user: fromUser.UserState
 }
 
-export const reducers: ActionReducerMap<State> = {
-    routerReducer: fromRouter.routerReducer
+// export const reducers: ActionReducerMap<State> = {
+export const reducers = {
+    router: fromRouter.routerReducer,
+    user: fromUser.reducer
 }
 
 export const getRouterState = createFeatureSelector<fromRouter.RouterReducerState<RouterStateUrl>>('routerReducer');
