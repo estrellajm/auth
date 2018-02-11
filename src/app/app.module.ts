@@ -10,7 +10,7 @@ import { StoreRouterConnectingModule, RouterStateSerializer } from "@ngrx/router
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { reducers, effects, CustomSerializer } from "./store";
+import { reducers, effects, CustomSerializer } from "./core/store";
 import { UserComponent } from './components/user/user.component';
 import { ComponentsModule } from './components/components.module';
 
