@@ -1,0 +1,38 @@
+<div *ngIf="user$ | async as user">
+  <div *ngIf="user.uid">
+    <h1>Howdy, {{ user.displayName }}</h1>
+    <p>UID: {{ user.uid }}</p>
+    <!-- <img [src]="user.photoURL"> -->
+    <p>Favorite Color: {{ user?.favoriteColor }} </p>
+    <button (click)="logout()">
+      Logout
+    </button>
+  </div>
+
+  <div *ngIf="!user.uid">
+    <form [formGroup]="login">
+      <div>
+        <label class="center-block">Email:
+          <input type="text" class="form-control" formControlName="email">
+        </label>
+        <label class="center-block">Password:
+          <input type="password" class="form-control" formControlName="password">
+        </label>
+      </div>
+      <button type="button" (click)="CustomLogin()">
+        Sign In
+      </button>
+      <button type="button" (click)="CustomRegister()">
+        Register
+      </button>
+    </form>
+    <button (click)="googleLogin()">
+      Sign In with Google
+    </button>
+    <button (click)="facebookLogin()">
+      Sign In with Facebook
+    </button>
+  </div>
+</div>
+
+<button (click)="user()">Take me to user</button>

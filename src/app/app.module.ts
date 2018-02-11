@@ -64,7 +64,7 @@ export const routes: Routes = [
       maxAge: 25
     })
   ],
-  providers: [{ provide: RouterStateSerializer, useClass: CustomSerializer }],
+  providers: [{ provide: RouterStateSerializer, useClass: CustomSerializer }, ...fromGuards.guards, ...fromServices.services],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

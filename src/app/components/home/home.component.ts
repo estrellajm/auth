@@ -20,5 +20,10 @@ export class HomeComponent implements OnInit {
       path: ['/user']
     }));
   }
+  login() {
+    this.store.dispatch(new fromRoot.Go({
+      path: ['/login']
+    }));
+  }
 
 }

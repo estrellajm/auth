@@ -38,3 +38,5 @@ export function reducer(state: User = defaultUser, action: Action) {
       state
   }
 }
+
+export const getUser = (state: UserState) => state.user;
