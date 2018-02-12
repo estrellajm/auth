@@ -24,7 +24,7 @@ export class AuthComponent implements OnInit {
   ) {
     this.store.dispatch(new userActions.GetUser());
     this.user$ = this.store.select('user');
-    // this.user$.subscribe(a=>console.log(a))
+    this.user$.subscribe(a=>console.log(a))
     this.login = this.fb.group({
       email: '',
       password: ''
@@ -35,7 +35,6 @@ export class AuthComponent implements OnInit {
   }
 
   user() {
-    console.log('fuck!!')
     this.store.dispatch(new fromRoot.Go({
       path: ['/user']
     }));

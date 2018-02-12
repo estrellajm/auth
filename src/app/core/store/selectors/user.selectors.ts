@@ -17,21 +17,21 @@ export const getUserLoading =
 
 export const getUserInfo =
     createSelector(getUser, fromUser.getUser);
-export const getUserShifts =
-    createSelector(getUserInfo,
-        (a) => {
-            const shifts = a.shifts
-            if (typeof shifts !== "undefined") {
-                return Object.keys(shifts).map(id => shifts[id])
-            }
-        }
-    );
-export const getUserShiftsPositions =
-    createSelector(
-        getUserShifts,
-        (a) => {
-            if (typeof a !== "undefined") {
-                return a.map(id => id.position)
-            }
-        }
-    );
+// export const getUserShifts =
+//     createSelector(getUserInfo,
+//         (a) => {
+//             const shifts = a.shifts
+//             if (typeof shifts !== "undefined") {
+//                 return Object.keys(shifts).map(id => shifts[id])
+//             }
+//         }
+//     );
+// export const getUserShiftsPositions =
+//     createSelector(
+//         getUserShifts,
+//         (a) => {
+//             if (typeof a !== "undefined") {
+//                 return a.map(id => id.position)
+//             }
+//         }
+//     );
