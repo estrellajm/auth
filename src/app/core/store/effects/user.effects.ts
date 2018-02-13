@@ -16,80 +16,22 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class UserEffects {
-    // @Effect()
-    // getUser: Observable<Action> = this.actions$.ofType(userActions.GET_USER).pipe(
-    //     map((action: userActions.GetUser) => action.payload),
-    //     switchMap(payload => this.afAuth.authState),
-    //     map(data => {
-    //         if (data) {
-    //             /// User logged in
-    //             let user = new User(data.uid, data.displayName);
-    //             let userStore = this.afs.doc<User>(`users/${data.uid}`).snapshotChanges()
-    //             console.log(userStore)
-    //             return new userActions.Authenticated(user);
-    //         } else {
-    //             /// User not logged in
-    //             return new userActions.NotAuthenticated();
-    //         }
-    //     }),
-    //     // code works.. but there is a delay
-    //     catchError(err => Observable.of(new userActions.AuthError()))
-    // );
-
-
-    // @Effect()
-    // getUser: Observable<Action> = this.actions$.ofType(userActions.GET_USER).pipe(
-    //     map((action: userActions.GetUser) => action.payload),
-    //     switchMap(payload => this.afAuth.authState),
-    //     map(authData => {
-    //         if (authData) {
-    //             /// User logged in
-    //             const user = new User(authData.uid, authData.displayName);
-    //             return new userActions.Authenticated(user);
-    //         } else {
-    //             /// User not logged in
-    //             return new userActions.NotAuthenticated();
-    //         }
-    //     }),
-    //     catchError(err => Observable.of(new userActions.AuthError())));
-
-
+    /// get user
     @Effect()
-    getUser: Observable<any> = this.actions$.ofType(userActions.GET_USER).pipe(
+    getUser$: Observable<Action> = this.actions$.ofType(userActions.GET_USER).pipe(
         map((action: userActions.GetUser) => action.payload),
         switchMap(payload => this.afAuth.authState),
-        map(data => {
-            if (data) {
-                /// User logged in
-                console.log(data)
-                return this.afs.doc<User>(`users/${data.uid}`).snapshotChanges().pipe(
-                    map(a => {
-                        return {
-                            type: userActions.AUTHENTICATED,
-                            payload: a.payload.data()
-                        }
-                    })
-                )
-            } else {
-                /// User not logged in
-                return new userActions.NotAuthenticated('finally');
-            }
+        switchMap(data => {
+            /// User logged in
+            return this.afs.doc<User>(`users/${data.uid}`).snapshotChanges().pipe(
+                map(action => {
+                    console.log('aaa')
+                    return new userActions.Authenticated(action.payload.data());
+                })
+            )
         }),
-        // switchMap(data => this.afs.doc<User>(`users/${data.uid}`).snapshotChanges()),
-        // map(data => {
-        //     if (data) {
-        //         /// User logged in
-        //         console.log(data.payload.data())
-        //         return new userActions.Authenticated(data.payload.data());
-
-        //     } else {
-        //         /// User not logged in
-        //         return new userActions.NotAuthenticated('finally');
-        //     }
-        // }),
-        catchError(err => {
-            return Observable.of(new userActions.AuthError({ error: err.message }))
-        })
+        map(() => new userActions.NotAuthenticated('from getUser')),
+        catchError(err => of(new userActions.AuthError({ errorrr: err.message })))
     );
 
 
@@ -97,9 +39,10 @@ export class UserEffects {
 
 
 
-    // Custom register
+
+    /// Custom register
     @Effect()
-    custom_register: Observable<Action> = this.actions$.ofType(userActions.CUSTOM_REGISTER).pipe(
+    custom_register$: Observable<Action> = this.actions$.ofType(userActions.CUSTOM_REGISTER).pipe(
         map((action: userActions.GoogleLogin) => action.payload),
         switchMap(user => {
             return this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password)
@@ -112,68 +55,85 @@ export class UserEffects {
         }),
         catchError(err => {
             return Observable.of(new userActions.AuthError({ error: err.message }))
-        }));
+        })
+    );
 
-    // Custom Login
+    /// Custom Login
     @Effect()
-    custom_login: Observable<Action> = this.actions$.ofType(userActions.CUSTOM_LOGIN).pipe(
+    custom_login$: Observable<Action> = this.actions$.ofType(userActions.CUSTOM_LOGIN).pipe(
         map((action: userActions.GoogleLogin) => action.payload),
         switchMap(user => {
             return this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password)
         }),
-        map(credential => {
-            // successful login
-            return new userActions.GetUser();
+        switchMap(credential => {
+            console.log(credential)
+            return this.afs.doc<User>(`users/${credential.uid}`).snapshotChanges().pipe(
+                map(data => {
+                    return new userActions.Authenticated(data.payload.data());
+                })
+            )
         }),
         catchError(err => {
             return Observable.of(new userActions.AuthError({ error: err.message }))
-        }));
+        })
+    );
 
-    // Google Login
+    /// Google Login
     @Effect()
-    google_login: Observable<Action> = this.actions$.ofType(userActions.GOOGLE_LOGIN).pipe(
+    google_login$: Observable<Action> = this.actions$.ofType(userActions.GOOGLE_LOGIN).pipe(
         map((action: userActions.GoogleLogin) => action.payload),
         switchMap(user => {
             return Observable.fromPromise(this.googleLogin());
         }),
-        map(credential => {
-            // successful login
-            return new userActions.GetUser();
+        // map(credential => {
+        //     // successful login
+        //     return new userActions.GetUser(credential.user);
+        // }),
+        switchMap(credential => {
+            return this.afs.doc<User>(`users/${credential.user.uid}`).snapshotChanges().pipe(
+                map(data => {
+                    return new userActions.Authenticated(data.payload.data());
+                })
+            )
         }),
-        catchError(err => {
-            return Observable.of(new userActions.AuthError({ error: err.message }))
-        }));
+        catchError(() => of(new userActions.NotAuthenticated()))
+    );
 
-    // Facebook Login
+    /// Facebook Login
     @Effect()
-    facebook_login: Observable<Action> = this.actions$.ofType(userActions.FACEBOOK_LOGIN).pipe(
+    facebook_login$: Observable<Action> = this.actions$.ofType(userActions.FACEBOOK_LOGIN).pipe(
         map((action: userActions.GoogleLogin) => action.payload),
         switchMap(user => {
             return Observable.fromPromise(this.facebookLogin());
         }),
-        map(credential => {
-            // successful login
-            return new userActions.GetUser();
+        switchMap(credential => {
+            return this.afs.doc<User>(`users/${credential.user.uid}`).snapshotChanges().pipe(
+                map(data => {
+                    return new userActions.Authenticated(data.payload.data());
+                })
+            )
         }),
         catchError(err => {
             return Observable.of(new userActions.AuthError({ error: err.message }))
-        }));
+        })
+    );
 
-    // Logout
+    /// Logout
     @Effect()
-    logout: Observable<Action> = this.actions$.ofType(userActions.LOGOUT).pipe(
+    logout$: Observable<Action> = this.actions$.ofType(userActions.LOGOUT).pipe(
         map((action: userActions.Logout) => action.payload),
         switchMap(payload => {
             return Observable.of(this.afAuth.auth.signOut());
         }),
-        map(authData => {
-            return new userActions.NotAuthenticated('from logout');
-        }),
-        catchError(err => Observable.of(new userActions.AuthError({ error: err.message }))));
+        map(() => new userActions.NotAuthenticated('from logoutssssss')),
+        catchError(err => of(new userActions.AuthError({ error: err.message })))
+    );
 
 
 
 
+
+    /// load user (redundant)
     @Effect()
     load_user$: Observable<Action> = this.actions$.ofType(userActions.LOAD_USER).pipe(
         map((action: userActions.LoadUser) => action.payload),
@@ -191,6 +151,8 @@ export class UserEffects {
             );
         })
     );
+
+    /// load user shifts
     @Effect()
     load_user_shifts$: Observable<Action> = this.actions$.ofType(userActions.LOAD_USER_SHIFTS).pipe(
         map((action: userActions.LoadUserShifts) => action.payload),
@@ -210,6 +172,8 @@ export class UserEffects {
             )
         })
     );
+
+    /// load user shifts
     @Effect()
     update_user$: Observable<Action> = this.actions$.ofType(userActions.UPDATE_USER).pipe(
         map((action: userActions.LoadUserShifts) => action.payload),

@@ -17,14 +17,13 @@ export const LOGOUT = '[Auth] Logout';
 export const AUTH_ERROR = '[Auth] Error';
 
 
-
 export const LOAD_FAIL = '[User] Load Fail';
 export class LoadFail implements Action {
     readonly type = LOAD_FAIL;
     constructor(public payload: any) { }
 }
 
-// load user
+/// load user
 export const LOAD_USER = '[User] Load User';
 export class LoadUser implements Action {
     readonly type = LOAD_USER;
@@ -46,7 +45,7 @@ export class LoadUserShiftsSuccess implements Action {
     constructor(public payload: any) { }
 }
 
-// save user
+/// save user
 export const UPDATE_USER = '[User] Update User';
 export class UpdateUser implements Action {
     readonly type = UPDATE_USER;
@@ -57,10 +56,6 @@ export class UpdateUserSuccess implements Action {
     readonly type = UPDATE_USER_SUCCESS;
     constructor(public payload: any) { }
 }
-
-
-
-
 
 /// Get User AuthState
 export class GetUser implements Action {

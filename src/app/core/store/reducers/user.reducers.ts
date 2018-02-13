@@ -22,13 +22,9 @@ export function reducer(state: User = defaultUser, action: Action) {
     case userActions.GET_USER:
       return { ...state, loading: true, loaded: false };
     case userActions.AUTHENTICATED:
-      // console.log('AUTHENTICATED:::')
-      // console.log(action.payload)
       return { ...state, ...action.payload, loading: false, loaded: true };
       case userActions.NOT_AUTHENTICATED:
-      // console.log('NOT_AUTHENTICATED:::')
-      // console.log(action.payload)
-      return { ...state, ...defaultUser, loading: false, loaded: true };
+      return { ...defaultUser, loading: false, loaded: true };
     case userActions.GOOGLE_LOGIN:
       return { ...state, loading: true, loaded: false };
     case userActions.AUTH_ERROR:

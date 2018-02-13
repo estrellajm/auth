@@ -1,12 +1,12 @@
 <div *ngIf="user$ | async as user">
   <div *ngIf="user.uid">
-    <h1>Howdy, {{ user.displayName }}</h1>
-    <p>UID: {{ user.uid }}</p>
-    <!-- <img [src]="user.photoURL"> -->
-    <p>Favorite Color: {{ user?.favoriteColor }} </p>
     <button (click)="logout()">
       Logout
     </button>
+    <h1>Howdy, {{ user.displayName }}</h1>
+    <p>UID: {{ user.uid }}</p>
+    <img [src]="user.photoURL">
+    <p>Favorite Color: {{ user?.favoriteColor }} </p>
   </div>
 
   <div *ngIf="!user.uid">
