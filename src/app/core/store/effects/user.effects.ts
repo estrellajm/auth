@@ -30,7 +30,7 @@ export class UserEffects {
                 })
             )
         }),
-        map(() => new userActions.NotAuthenticated('from getUser')),
+        // map(() => new userActions.NotAuthenticated('from getUser')),
         catchError(err => of(new userActions.AuthError({ errorrr: err.message })))
     );
 
