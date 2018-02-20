@@ -4,17 +4,16 @@ import { CanActivate } from '@angular/router';
 import { Store } from "@ngrx/store";
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
-import { AuthService } from '../services/auth.service';
 import { tap, filter, take, switchMap, catchError, map } from "rxjs/operators";
+import * as fromRouter from '../actions'
 
-import * as fromUserRed from '../reducers/user.reducers'
-import * as fromUserAct from '../actions/user.actions'
+import * as fromStore from '../reducers/user.reducers'
+import * as userAction from '../actions/user.actions'
 
 @Injectable()
 export class UserGuard implements CanActivate {
   constructor(
-    private store: Store<fromUserRed.UserState>,
-    private auth: AuthService) { }
+    private store: Store<fromStore.UserState>) { }
 
   canActivate(): Observable<boolean> {
     return this.checkStore().pipe(
@@ -24,14 +23,15 @@ export class UserGuard implements CanActivate {
   }
 
   checkStore(): Observable<boolean> {
-    return this.store.select(fromUserRed.getUserLoaded)
+    return this.store.select(fromStore.getUserID)
       .pipe(
-        tap(loaded => {
-          if (!loaded) {
-            this.store.dispatch(new fromUserAct.GetUser())
+        tap(id => {
+          if (!id) {
+            this.store.dispatch(new userAction.LoadUser())
+            this.store.dispatch(new userAction.LoadUserShifts())
           }
         }),
-        filter(loaded => loaded),
+        filter(id => id),
         take(1)
       )
   }

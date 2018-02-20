@@ -22,7 +22,7 @@ export class AuthComponent implements OnInit {
     private store: Store<AppState>,
     private fb: FormBuilder
   ) {
-    this.store.dispatch(new userActions.GetUser());
+    this.store.dispatch(new userActions.LoadUser());
     this.user$ = this.store.select('user');
     this.user$.subscribe(a=>console.log(a))
     this.login = this.fb.group({

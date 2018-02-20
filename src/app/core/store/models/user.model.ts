@@ -3,8 +3,6 @@ export interface User {
     displayName: string;
     photoURL?: string;
     shifts?: object;
-    loading?: boolean;
-    loaded?: boolean;
     error?: string;
 }
 export class User implements User {

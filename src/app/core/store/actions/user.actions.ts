@@ -1,34 +1,54 @@
 import { Action } from '@ngrx/store';
 import { User } from '../models/user.model';
 
-export const GET_USER = '[Auth] Get user';
-export const GET_USER_INFO = '[Auth] Get user info';
-export const GET_USER_SHIFTS = '[Auth] Get User Shifts';
-export const AUTHENTICATED = '[Auth] Authenticated';
-export const NOT_AUTHENTICATED = '[Auth] Not Authenticated';
 
-export const CUSTOM_REGISTER = '[Auth] Custom register';
-
-export const CUSTOM_LOGIN = '[Auth] Custom login attempt';
-export const GOOGLE_LOGIN = '[Auth] Google login attempt';
-export const FACEBOOK_LOGIN = '[Auth] Facebook login attempt';
-
-export const LOGOUT = '[Auth] Logout';
-export const AUTH_ERROR = '[Auth] Error';
-
-
-export const LOAD_FAIL = '[User] Load Fail';
-export class LoadFail implements Action {
-    readonly type = LOAD_FAIL;
-    constructor(public payload: any) { }
+////////////////////////////////////
+/// REGISTRATION & LOGIN ACTIONS ///
+////////////////////////////////////
+export const CUSTOM_REGISTER = '[Auth] Custom Register';
+export class CustomRegister implements Action {
+    readonly type = CUSTOM_REGISTER;
+    constructor(public payload?: any) { }
+}
+export const CUSTOM_LOGIN = '[Auth] Custom Login';
+export class CustomLogin implements Action {
+    readonly type = CUSTOM_LOGIN;
+    constructor(public payload?: any) { }
+}
+export const GOOGLE_LOGIN = '[Auth] Google Login';
+export class GoogleLogin implements Action {
+    readonly type = GOOGLE_LOGIN;
+    constructor(public payload?: any) { }
+}
+export const FACEBOOK_LOGIN = '[Auth] Facebook Login';
+export class FacebookLogin implements Action {
+    readonly type = FACEBOOK_LOGIN;
+    constructor(public payload?: any) { }
 }
 
-/// load user
+/////////////////
+/// AUTHSTATE ///
+/////////////////
+export const AUTHENTICATED = '[Auth] Authenticated';
+export class Authenticated implements Action {
+    readonly type = AUTHENTICATED;
+    constructor(public payload?: any) { }
+}
+export const NOT_AUTHENTICATED = '[Auth] Not Authenticated';
+export class NotAuthenticated implements Action {
+    readonly type = NOT_AUTHENTICATED;
+    constructor(public payload?: any) { }
+}
+
+/////////////////
+/// LOAD USER ///
+/////////////////
 export const LOAD_USER = '[User] Load User';
 export class LoadUser implements Action {
     readonly type = LOAD_USER;
-    constructor(public payload: any) { }
+    constructor() { }
 }
+/// Below not being userReducer. Using Authenticated
 export const LOAD_USER_SUCCESS = '[User] Load User Success';
 export class LoadUserSuccess implements Action {
     readonly type = LOAD_USER_SUCCESS;
@@ -37,7 +57,7 @@ export class LoadUserSuccess implements Action {
 export const LOAD_USER_SHIFTS = '[User] Load User Shifts';
 export class LoadUserShifts implements Action {
     readonly type = LOAD_USER_SHIFTS;
-    constructor(public payload: any) { }
+    constructor() { }
 }
 export const LOAD_USER_SHIFTS_SUCCESS = '[User] Load User Shifts Success';
 export class LoadUserShiftsSuccess implements Action {
@@ -45,7 +65,29 @@ export class LoadUserShiftsSuccess implements Action {
     constructor(public payload: any) { }
 }
 
-/// save user
+//////////////////////////////////
+/// MISC AUTH & USER FUNCTIONS ///
+//////////////////////////////////
+export const SEND_EMAIL_VERIFICATION = '[Auth] Send Email Verification';
+export class SendEmailVerification implements Action {
+    readonly type = SEND_EMAIL_VERIFICATION;
+    constructor(public payload?: any) { }
+}
+export const FORGOT_PASSWORD = '[Auth] Forgot Password';
+export class ForgotPassword implements Action {
+    readonly type = FORGOT_PASSWORD;
+    constructor(public payload?: any) { }
+}
+export const UPDATE_EMAIL = '[Auth] Update Email';
+export class UpdateEmail implements Action {
+    readonly type = UPDATE_EMAIL;
+    constructor(public payload?: any) { }
+}
+export const UPDATE_PASSWORD = '[Auth] Update Password';
+export class UpdatePassword implements Action {
+    readonly type = UPDATE_PASSWORD;
+    constructor(public payload?: any) { }
+}
 export const UPDATE_USER = '[User] Update User';
 export class UpdateUser implements Action {
     readonly type = UPDATE_USER;
@@ -57,73 +99,56 @@ export class UpdateUserSuccess implements Action {
     constructor(public payload: any) { }
 }
 
-/// Get User AuthState
-export class GetUser implements Action {
-    readonly type = GET_USER;
-    constructor(public payload?: any) { }
-}
-export class GetUserInfo implements Action {
-    readonly type = GET_USER_INFO;
-    constructor(public payload?: any) { }
-}
-export class GetUserShifts implements Action {
-    readonly type = GET_USER_SHIFTS;
-    constructor(public payload: any) { }
-}
-export class Authenticated implements Action {
-    readonly type = AUTHENTICATED;
-    constructor(public payload?: any) { }
-}
-export class NotAuthenticated implements Action {
-    readonly type = NOT_AUTHENTICATED;
-    constructor(public payload?: any) { }
-}
-export class AuthError implements Action {
-    readonly type = AUTH_ERROR;
-    constructor(public payload?: any) { }
-}
-
-/// Register Actions
-export class CustomRegister implements Action {
-    readonly type = CUSTOM_REGISTER;
-    constructor(public payload?: any) { }
-}
-
-/// Login Actions
-export class CustomLogin implements Action {
-    readonly type = CUSTOM_LOGIN;
-    constructor(public payload?: any) { }
-}
-export class GoogleLogin implements Action {
-    readonly type = GOOGLE_LOGIN;
-    constructor(public payload?: any) { }
-}
-export class FacebookLogin implements Action {
-    readonly type = FACEBOOK_LOGIN;
-    constructor(public payload?: any) { }
-}
-
-/// Logout Actions
+//////////////
+/// LOGOUT ///
+//////////////
+export const LOGOUT = '[Auth] Logout';
 export class Logout implements Action {
     readonly type = LOGOUT;
     constructor(public payload?: any) { }
 }
+export const LOGOUT_SUCCESS = '[Auth] Logout Success';
+export class LogoutSuccess implements Action {
+    readonly type = LOGOUT_SUCCESS;
+    constructor(public payload?: any) { }
+}
+
+//////////////
+/// ERRORS ///
+//////////////
+export const AUTH_ERROR = '[Auth] Error';
+export class AuthError implements Action {
+    readonly type = AUTH_ERROR;
+    constructor(public payload?: any) { }
+}
+export const LOAD_FAIL = '[User] Load Fail';
+export class LoadFail implements Action {
+    readonly type = LOAD_FAIL;
+    constructor(public payload: any) { }
+}
+
 export type All
-    = GetUser
-    | GetUserInfo
-    | GetUserShifts
-    | Authenticated
-    | NotAuthenticated
-    | CustomRegister
+    = CustomRegister
     | CustomLogin
     | GoogleLogin
     | FacebookLogin
-    | AuthError
-    | Logout
-    | LoadFail
+    
+    | Authenticated
+    | NotAuthenticated
+    
     | LoadUser
     | LoadUserSuccess
     | LoadUserShifts
     | LoadUserShiftsSuccess
+
+    | SendEmailVerification
+    | ForgotPassword
+    | UpdateEmail
+    | UpdatePassword
     | UpdateUser
-    | UpdateUserSuccess;
+    | UpdateUserSuccess
+
+    | Logout
+    | LogoutSuccess
+    | AuthError
+    | LoadFail;

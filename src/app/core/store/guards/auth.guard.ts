@@ -1,28 +1,57 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { CanActivate } from '@angular/router';
+
+import { AngularFireAuth } from 'angularfire2/auth';
+import { Store } from "@ngrx/store";
 import { Observable } from 'rxjs/Observable';
-import { AuthService } from '../services/auth.service';
+import { of } from 'rxjs/observable/of';
 import { tap, filter, take, switchMap, catchError, map } from "rxjs/operators";
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/take';
+import * as fromRouter from '../actions'
+
+import * as fromStore from '../reducers/user.reducers'
+import * as userAction from '../actions/user.actions'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private afAuth: AngularFireAuth, private store: Store<fromStore.UserState>) { }
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      return this.auth.user
-           .take(1)
-           .map(user => !!user)
-           .do(loggedIn => {
-             if (!loggedIn) {
-               console.log('access denied')
-               this.router.navigate(['/']);
-             }
-         })
 
+  canActivate(): Observable<boolean> {
+    return this.afAuth.authState.pipe(
+      take(1),
+      map(user => !!user),
+      tap(loggedIn => {
+        if (!loggedIn) {
+          console.log('access denied')
+          this.store.dispatch(new fromRouter.Go({ path: ['/login'] }));
+        }
+      })
+    )
   }
+
+
+  // canActivate(): Observable<boolean> {
+  //   return this.checkStore().pipe(
+  //     switchMap(() => of(true)),
+  //     catchError(() => of(false))
+  //   )
+  // }
+
+  // checkStore(): Observable<boolean> {
+  //   return this.store.select(fromStore.getUserID)
+  //     .pipe(
+  //     tap(id => {
+  //       if (!id) {
+  //         this.store.dispatch(new userAction.GetUser())
+  //       }
+  //     }),
+  //     tap(loaded => {
+  //       if (!loaded) {
+  //         this.store.dispatch(new fromRouter.Go({ path: ['/login'] }));
+  //       }
+  //     }),
+  //     filter(loaded => loaded),
+  //     take(1)
+  //     )
+  // }
 }
