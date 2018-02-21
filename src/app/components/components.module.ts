@@ -9,11 +9,11 @@ import * as fromGuards from '@core/store/guards';
 
 export const routes: Routes = [
   {
-    path: 'home',  
+    path: 'home',
     component: HomeComponent
   },
   {
-    path: 'user',
+    path: 'dashboard',
     canActivate: [fromGuards.AuthGuard],
     component: UserComponent
   }
