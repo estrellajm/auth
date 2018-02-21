@@ -5,9 +5,9 @@ export type Action = userActions.All;
 declare var firebaseApp: any;
 
 export interface UserState {
-  uid: string,
-  name: string,
-  shifts: object,
+  uid: string;
+  name: string;
+  shifts: object;
   loaded: boolean;
   loading: boolean;
 }
@@ -17,11 +17,14 @@ export const initialState: UserState = {
   name: 'GUEST',
   shifts: {},
   loaded: true,
-  loading: false,
-}
+  loading: false
+};
 
 /// Reducer function
-export function userReducer(state: UserState = initialState, action: Action): UserState {
+export function userReducer(
+  state: UserState = initialState,
+  action: Action
+): UserState {
   switch (action.type) {
     case userActions.AUTHENTICATED:
       return { ...state, ...action.payload, loading: false, loaded: true };
@@ -32,21 +35,21 @@ export function userReducer(state: UserState = initialState, action: Action): Us
     case userActions.LOAD_USER:
       return { ...state, loading: true, loaded: false };
     case userActions.LOAD_USER_SHIFTS_SUCCESS: {
-      let user = state
-      let shifts = state.shifts
-      let new_shift = action.payload
-      shifts = { ...shifts, [new_shift.id]: new_shift }
-      return { ...state, shifts, loading: false, loaded: true }
+      const user = state;
+      let shifts = state.shifts;
+      const new_shift = action.payload;
+      shifts = { ...shifts, [new_shift.id]: new_shift };
+      return { ...state, shifts, loading: false, loaded: true };
     }
     case userActions.LOGOUT:
       return initialState;
     case userActions.AUTH_ERROR:
       return { ...state, ...action.payload, loading: false, loaded: true };
     case userActions.LOAD_FAIL: {
-      return initialState
+      return initialState;
     }
     default:
-      return state
+      return state;
   }
 }
 
@@ -55,26 +58,23 @@ export const getUserID = (state: UserState) => state['user'].uid;
 export const getUserLoading = (state: UserState) => state['user'].loading;
 export const getUserLoaded = (state: UserState) => state['user'].loaded;
 
-
-
-
-    // case userActions.LOAD_USER_SHIFTS_SUCCESS: {
-    //   let user = state.user
-    //   let shifts = state.user.shifts
-    //   let newShift = action.payload;
-    //   newShift = { [newShift.id]: newShift };
-    //   shifts = {
-    //     ...shifts,
-    //     ...newShift
-    //   }
-    //   user = {
-    //     ...user,
-    //     shifts
-    //   }
-    //   return {
-    //     ...state,
-    //     user,
-    //     loading: false,
-    //     loaded: true
-    //   }
-    // }
+// case userActions.LOAD_USER_SHIFTS_SUCCESS: {
+//   let user = state.user
+//   let shifts = state.user.shifts
+//   let newShift = action.payload;
+//   newShift = { [newShift.id]: newShift };
+//   shifts = {
+//     ...shifts,
+//     ...newShift
+//   }
+//   user = {
+//     ...user,
+//     shifts
+//   }
+//   return {
+//     ...state,
+//     user,
+//     loading: false,
+//     loaded: true
+//   }
+// }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from "@ngrx/store";
+import { Store } from '@ngrx/store';
 import * as fromRoot from '@core/store';
-import * as fromStore from '@core/store'
+import * as fromStore from '@core/store';
 
 @Component({
   selector: 'app-home',
@@ -9,21 +9,22 @@ import * as fromStore from '@core/store'
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  constructor(private store: Store<any>) {}
 
-  constructor(private store: Store<any>) { }
+  ngOnInit() {}
 
-  ngOnInit() {
-  }
-  
   user() {
-    this.store.dispatch(new fromRoot.Go({
-      path: ['/user']
-    }));
+    this.store.dispatch(
+      new fromRoot.Go({
+        path: ['/dashboard']
+      })
+    );
   }
   login() {
-    this.store.dispatch(new fromRoot.Go({
-      path: ['/login']
-    }));
+    this.store.dispatch(
+      new fromRoot.Go({
+        path: ['/login']
+      })
+    );
   }
-
 }

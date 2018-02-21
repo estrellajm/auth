@@ -18,26 +18,24 @@ export class AuthComponent implements OnInit {
   login: FormGroup;
   user$: Observable<User>;
 
-  constructor(
-    private store: Store<AppState>,
-    private fb: FormBuilder
-  ) {
+  constructor(private store: Store<AppState>, private fb: FormBuilder) {
     this.store.dispatch(new userActions.LoadUser());
     this.user$ = this.store.select('user');
-    this.user$.subscribe(a=>console.log(a))
+    this.user$.subscribe(a => console.log(a));
     this.login = this.fb.group({
       email: '',
       password: ''
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   user() {
-    this.store.dispatch(new fromRoot.Go({
-      path: ['/user']
-    }));
+    this.store.dispatch(
+      new fromRoot.Go({
+        path: ['/dashboard']
+      })
+    );
   }
 
   CustomRegister() {
@@ -57,5 +55,4 @@ export class AuthComponent implements OnInit {
   logout() {
     this.store.dispatch(new userActions.Logout());
   }
-
 }

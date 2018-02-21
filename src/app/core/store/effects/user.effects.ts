@@ -1,21 +1,21 @@
-import { Injectable } from "@angular/core";
-import { Effect, Actions } from "@ngrx/effects";
-import { Action, Store } from "@ngrx/store";
-import { User } from "../models/user.model";
-import { AngularFireAuth } from "angularfire2/auth";
+import { Injectable } from '@angular/core';
+import { Effect, Actions } from '@ngrx/effects';
+import { Action, Store } from '@ngrx/store';
+import { User } from '../models/user.model';
+import { AngularFireAuth } from 'angularfire2/auth';
 import {
   AngularFirestore,
   AngularFirestoreDocument
-} from "angularfire2/firestore";
-import * as firebase from "firebase";
-import { Observable } from "rxjs/Observable";
-import { of } from "rxjs/observable/of";
-import "rxjs/add/observable/fromPromise";
-import "rxjs/add/observable/of";
-import { tap, map, switchMap, mergeMap, catchError } from "rxjs/operators";
-import * as userActions from "../actions/user.actions";
-import { Router } from "@angular/router";
-import * as fromRouter from "../actions";
+} from 'angularfire2/firestore';
+import * as firebase from 'firebase';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/observable/of';
+import { tap, map, switchMap, mergeMap, catchError } from 'rxjs/operators';
+import * as userActions from '../actions/user.actions';
+import { Router } from '@angular/router';
+import * as fromRouter from '../actions';
 
 @Injectable()
 export class UserEffects {
@@ -64,7 +64,7 @@ export class UserEffects {
       }),
       map(() => {
         return new fromRouter.Go({
-          path: ["/dashboard"]
+          path: ['/dashboard']
         });
       }),
       catchError(err => {
@@ -95,7 +95,7 @@ export class UserEffects {
                   payload: action.payload.data()
                 };
               }),
-              switchMap(() => of(new fromRouter.Go({ path: ["/dashboard"] }))),
+              switchMap(() => of(new fromRouter.Go({ path: ['/dashboard'] }))),
               catchError(err => of(new userActions.LoadFail(err)))
             );
         }
@@ -107,7 +107,7 @@ export class UserEffects {
   @Effect({ dispatch: false })
   logoutSuccess$: Observable<Action> = this.actions$
     .ofType(userActions.LOGOUT_SUCCESS)
-    .pipe(switchMap(() => of(new fromRouter.Go({ path: ["/dashboard"] }))));
+    .pipe(switchMap(() => of(new fromRouter.Go({ path: ['/dashboard'] }))));
 
   /// Facebook Login
   @Effect()
@@ -129,7 +129,7 @@ export class UserEffects {
           );
       }),
       map(() => {
-        return new fromRouter.Go({ path: ["/dashboard"] });
+        return new fromRouter.Go({ path: ['/dashboard'] });
       }),
       catchError(err => {
         return Observable.of(new userActions.AuthError({ error: err.message }));
@@ -205,7 +205,7 @@ export class UserEffects {
           this.afAuth.auth.currentUser.sendEmailVerification(payload)
         );
       }),
-      map(() => new userActions.NotAuthenticated("Verify your email")),
+      map(() => new userActions.NotAuthenticated('Verify your email')),
       catchError(err => of(new userActions.AuthError({ error: err.message })))
     );
 
@@ -219,7 +219,7 @@ export class UserEffects {
         console.log(payload);
         return Observable.of(this.afAuth.auth.sendPasswordResetEmail(payload));
       }),
-      map(() => new userActions.NotAuthenticated("forgot password email sent")),
+      map(() => new userActions.NotAuthenticated('forgot password email sent')),
       catchError(err => of(new userActions.AuthError({ error: err.message })))
     );
 
@@ -233,7 +233,7 @@ export class UserEffects {
         console.log(payload);
         return Observable.of(this.afAuth.auth.currentUser.updateEmail(payload));
       }),
-      map(() => new userActions.NotAuthenticated("update email successfull")),
+      map(() => new userActions.NotAuthenticated('update email successfull')),
       catchError(err => of(new userActions.AuthError({ error: err.message })))
     );
 
@@ -250,7 +250,7 @@ export class UserEffects {
         );
       }),
       map(
-        () => new userActions.NotAuthenticated("update password successfull")
+        () => new userActions.NotAuthenticated('update password successfull')
       ),
       catchError(err => of(new userActions.AuthError({ error: err.message })))
     );
@@ -276,10 +276,10 @@ export class UserEffects {
     switchMap(payload => {
       return Observable.of(this.afAuth.auth.signOut());
     }),
-    map(() => new userActions.NotAuthenticated("from logouttttt")),
+    map(() => new userActions.NotAuthenticated('from logouttttt')),
     map(() => {
       return new fromRouter.Go({
-        path: ["/login"]
+        path: ['/login']
       });
     }),
     catchError(err => of(new userActions.AuthError({ error: err.message })))
