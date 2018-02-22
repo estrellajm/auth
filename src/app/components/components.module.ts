@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { UserComponent } from './user/user.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
 
 // guards
@@ -10,12 +10,13 @@ import * as fromGuards from '@core/store/guards';
 export const routes: Routes = [
   {
     path: 'home',
+    canActivate: [fromGuards.AuthGuard],
     component: HomeComponent
   },
   {
     path: 'dashboard',
     canActivate: [fromGuards.AuthGuard],
-    component: UserComponent
+    component: DashboardComponent
   }
 ];
 
@@ -26,7 +27,7 @@ export const routes: Routes = [
   ],
   declarations: [
     HomeComponent,
-    UserComponent
+    DashboardComponent
   ]
 })
 export class ComponentsModule { }

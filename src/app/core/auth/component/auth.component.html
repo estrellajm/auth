@@ -1,11 +1,11 @@
-<div *ngIf="user$ | async as user">
+<div *ngIf="(user$ | async) as user">
   <div *ngIf="user.uid">
-    <button (click)="logout()">
-      Logout
-    </button>
+    <button (click)="dashboard()">Take me to Dashboard</button>
+    <button (click)="home()">Take me to Home</button>
+    <button (click)="logout()">Logout</button>
     <h1>Howdy, {{ user.displayName }}</h1>
     <p>UID: {{ user.uid }}</p>
-    <img [src]="user.photoURL">
+    <img [src]="user.photoURL" style="max-width: 100px !important">
     <p>Favorite Color: {{ user?.favoriteColor }} </p>
   </div>
 
@@ -34,5 +34,3 @@
     </button>
   </div>
 </div>
-
-<button (click)="user()">Take me to user</button>

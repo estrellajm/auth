@@ -2,19 +2,21 @@ import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
-import { Store } from "@ngrx/store";
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
-import { tap, filter, take, switchMap, catchError, map } from "rxjs/operators";
-import * as fromRouter from '../actions'
+import { tap, filter, take, switchMap, catchError, map } from 'rxjs/operators';
+import * as fromRouter from '../actions';
 
-import * as fromStore from '../reducers/user.reducers'
-import * as userAction from '../actions/user.actions'
+import * as fromStore from '../reducers/user.reducers';
+import * as userAction from '../actions/user.actions';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private afAuth: AngularFireAuth, private store: Store<fromStore.UserState>) { }
-
+  constructor(
+    private afAuth: AngularFireAuth,
+    private store: Store<fromStore.UserState>
+  ) {}
 
   canActivate(): Observable<boolean> {
     return this.afAuth.authState.pipe(
@@ -22,13 +24,12 @@ export class AuthGuard implements CanActivate {
       map(user => !!user),
       tap(loggedIn => {
         if (!loggedIn) {
-          console.log('access denied')
+          console.log('access denied');
           this.store.dispatch(new fromRouter.Go({ path: ['/login'] }));
         }
       })
-    )
+    );
   }
-
 
   // canActivate(): Observable<boolean> {
   //   return this.checkStore().pipe(
