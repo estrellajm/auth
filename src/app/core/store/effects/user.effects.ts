@@ -72,21 +72,11 @@ export class UserEffects {
       if (user.additionalUserInfo.isNewUser) {
         this.updateUserData(user);
       } else if (user) {
-        return this.afs
-          .doc<User>(`users/${user.uid}`)
-          .snapshotChanges()
-          .pipe(
-            map(action => {
-              return {
-                type: userActions.AUTHENTICATED,
-                payload: action.payload.data()
-              };
-            }),
-            switchMap(() => of(new fromRouter.Go({ path: ['/dashboard'] }))),
-            catchError(err => of(new userActions.LoadFail(err)))
-          );
+        return this.afs.doc<User>(`users/${user.uid}`).snapshotChanges();
       }
     }),
+    switchMap(() => of(new fromRouter.Go({ path: ['/dashboard'] }))),
+    switchMap(() => of(new userActions.LoadUser())),
     catchError(err => of(new userActions.AuthError({ error: err.message })))
   );
 
@@ -230,7 +220,7 @@ export class UserEffects {
       catchError(err => of(new userActions.AuthError({ error: err.message })))
     );
 
-  /// update user
+  /// Update User
   @Effect()
   update_user$: Observable<Action> = this.actions$.ofType(userActions.UPDATE_USER).pipe(
     map((action: userActions.UpdateUser) => action.payload),
@@ -250,11 +240,11 @@ export class UserEffects {
       return Observable.of(this.afAuth.auth.signOut());
     }),
     map(() => new userActions.NotAuthenticated('from logouttttt')),
-    map(() => {
-      return new fromRouter.Go({
-        path: ['/login']
-      });
-    }),
+    // map(() => {
+    //   return new fromRouter.Go({
+    //     path: ['/login']
+    //   });
+    // }),
     catchError(err => of(new userActions.AuthError({ error: err.message })))
   );
 
