@@ -32,9 +32,9 @@ export function userReducer(state: UserState = initialState, action: Action): Us
     case userActions.LOAD_USER:
       return { ...state, loading: true, loaded: false };
     case userActions.LOAD_USER_SHIFTS_SUCCESS: {
-      let user = state;
+      const user = state;
       let shifts = state.shifts;
-      let new_shift = action.payload;
+      const new_shift = action.payload;
       shifts = { ...shifts, [new_shift.id]: new_shift };
       return { ...state, shifts, loading: false, loaded: true };
     }
