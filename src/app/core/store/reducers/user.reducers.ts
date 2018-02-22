@@ -21,10 +21,7 @@ export const initialState: UserState = {
 };
 
 /// Reducer function
-export function userReducer(
-  state: UserState = initialState,
-  action: Action
-): UserState {
+export function userReducer(state: UserState = initialState, action: Action): UserState {
   switch (action.type) {
     case userActions.AUTHENTICATED:
       return { ...state, ...action.payload, loading: false, loaded: true };
@@ -35,9 +32,9 @@ export function userReducer(
     case userActions.LOAD_USER:
       return { ...state, loading: true, loaded: false };
     case userActions.LOAD_USER_SHIFTS_SUCCESS: {
-      const user = state;
+      let user = state;
       let shifts = state.shifts;
-      const new_shift = action.payload;
+      let new_shift = action.payload;
       shifts = { ...shifts, [new_shift.id]: new_shift };
       return { ...state, shifts, loading: false, loaded: true };
     }

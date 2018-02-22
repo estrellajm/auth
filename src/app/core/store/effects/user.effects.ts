@@ -76,15 +76,14 @@ export class UserEffects {
       }
     }),
     switchMap(() => of(new fromRouter.Go({ path: ['/dashboard'] }))),
-    switchMap(() => of(new userActions.LoadUser())),
     catchError(err => of(new userActions.AuthError({ error: err.message })))
   );
 
   /// Logout Success
-  @Effect({ dispatch: false })
-  logoutSuccess$: Observable<Action> = this.actions$
-    .ofType(userActions.LOGOUT_SUCCESS)
-    .pipe(switchMap(() => of(new fromRouter.Go({ path: ['/dashboard'] }))));
+  // @Effect({ dispatch: false })
+  // logoutSuccess$: Observable<Action> = this.actions$
+  //   .ofType(userActions.LOGOUT_SUCCESS)
+  //   .pipe(switchMap(() => of(new fromRouter.Go({ path: ['/dashboard'] }))));
 
   /// Facebook Login
   @Effect()
@@ -220,7 +219,7 @@ export class UserEffects {
       catchError(err => of(new userActions.AuthError({ error: err.message })))
     );
 
-  /// Update User
+  /// update user
   @Effect()
   update_user$: Observable<Action> = this.actions$.ofType(userActions.UPDATE_USER).pipe(
     map((action: userActions.UpdateUser) => action.payload),
@@ -235,16 +234,10 @@ export class UserEffects {
   /// Logout
   @Effect()
   logout$: Observable<Action> = this.actions$.ofType(userActions.LOGOUT).pipe(
-    map((action: userActions.Logout) => action.payload),
-    switchMap(payload => {
+    switchMap(() => {
       return Observable.of(this.afAuth.auth.signOut());
     }),
     map(() => new userActions.NotAuthenticated('from logouttttt')),
-    // map(() => {
-    //   return new fromRouter.Go({
-    //     path: ['/login']
-    //   });
-    // }),
     catchError(err => of(new userActions.AuthError({ error: err.message })))
   );
 
@@ -259,7 +252,7 @@ export class UserEffects {
 
   private getUserData(credentials) {
     // Sets user data to firestore on login
-    const user = {
+    let user = {
       ...credentials.user,
       ...credentials.additionalUserInfo.profile,
       ...credentials.additionalUserInfo.providerId
@@ -273,7 +266,7 @@ export class UserEffects {
   }
   private updateUserData(credentials) {
     // Sets user data to firestore on login
-    const user = {
+    let user = {
       ...credentials.user,
       ...credentials.additionalUserInfo.profile,
       ...credentials.additionalUserInfo.providerId

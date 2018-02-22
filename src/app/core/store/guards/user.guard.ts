@@ -23,7 +23,6 @@ export class UserGuard implements CanActivate {
       tap(id => {
         if (!id) {
           this.store.dispatch(new userAction.LoadUser());
-          this.store.dispatch(new userAction.LoadUserShifts());
         }
       }),
       filter(id => id),

@@ -13,10 +13,7 @@ import * as userAction from '../actions/user.actions';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(
-    private afAuth: AngularFireAuth,
-    private store: Store<fromStore.UserState>
-  ) {}
+  constructor(private afAuth: AngularFireAuth, private store: Store<fromStore.UserState>) {}
 
   canActivate(): Observable<boolean> {
     return this.afAuth.authState.pipe(

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Router } from "@angular/router";
-import * as firebase from "firebase/app";
-import { AngularFireAuth } from "angularfire2/auth";
-import { AngularFirestore, AngularFirestoreDocument } from "angularfire2/firestore";
+import { Router } from '@angular/router';
+import * as firebase from 'firebase/app';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 
-import { Observable } from "rxjs/Observable";
-import { switchMap } from "rxjs/operators";
+import { Observable } from 'rxjs/Observable';
+import { switchMap } from 'rxjs/operators';
 
 interface User {
   uid: string;
@@ -24,26 +24,24 @@ export class AuthService {
     private router: Router
   ) {
     //// Get auth data, then get firestore user document || null
-    this.user = this.afAuth.authState
-      .switchMap(user => {
-        if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
-        } else {
-          return Observable.of(null)
-        }
-      })
+    this.user = this.afAuth.authState.switchMap(user => {
+      if (user) {
+        return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+      } else {
+        return Observable.of(null);
+      }
+    });
   }
 
   googleLogin() {
-    const provider = new firebase.auth.GoogleAuthProvider()
+    const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
   }
   private oAuthLogin(provider) {
-    return this.afAuth.auth.signInWithPopup(provider)
-      .then((credential) => {
-        this.router.navigate(['/user']);
-        this.updateUserData(credential.user)
-      })
+    return this.afAuth.auth.signInWithPopup(provider).then(credential => {
+      this.router.navigate(['/user']);
+      this.updateUserData(credential.user);
+    });
   }
   private updateUserData(user) {
     // Sets user data to firestore on login
@@ -53,13 +51,12 @@ export class AuthService {
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL
-    }
-    return userRef.set(data)
+    };
+    return userRef.set(data);
   }
   signOut() {
     this.afAuth.auth.signOut().then(() => {
       this.router.navigate(['/']);
     });
   }
-
 }

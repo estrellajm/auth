@@ -104,7 +104,6 @@ export class UpdateUserSuccess implements Action {
 export const LOGOUT = '[Auth] Logout';
 export class Logout implements Action {
   readonly type = LOGOUT;
-  constructor(public payload?: any) {}
 }
 export const LOGOUT_SUCCESS = '[Auth] Logout Success';
 export class LogoutSuccess implements Action {
